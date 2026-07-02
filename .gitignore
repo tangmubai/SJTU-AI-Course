@@ -10,3 +10,4 @@ dist/
 .dev.vars
 .env
 cloudflared-aitest.yml
+.impeccable
