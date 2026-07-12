@@ -49,7 +49,7 @@
           <div>
             <span class="mode-icon">01</span>
             <h2>顺序练习全部题目</h2>
-            <p>严格按照 PDF 文件及题目原顺序练习。</p>
+            <p id="allModeDescription">按原顺序练习尚未作答的题目。</p>
           </div>
           <button id="allModeButton" class="button primary" type="button">开始顺序练习</button>
         </article>
@@ -84,20 +84,12 @@
         <div id="documentList" class="document-list"></div>
       </section>
 
-      <section class="discussion-panel" aria-labelledby="discussionTitle">
+      <section class="discussion-panel home-discussion" aria-labelledby="homeDiscussionTitle">
         <div class="discussion-heading">
-          <div>
-            <p class="eyebrow">课程社区</p>
-            <h2 id="discussionTitle">讨论与交流</h2>
-            <p>本页留言会同步为独立的 GitHub Discussion；也可以浏览或发起其他课程主题。</p>
-          </div>
-          <div class="discussion-actions">
-            <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions" target="_blank" rel="noopener">浏览全部讨论 ↗</a>
-            <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions/new?category=general" target="_blank" rel="noopener">发起新讨论 ↗</a>
-          </div>
+          <h2 id="homeDiscussionTitle">课程讨论</h2>
+          <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions/7" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
         </div>
-        <p id="discussionStatus" class="discussion-status" aria-live="polite">正在加载讨论区…</p>
-        <div id="discussionEmbed" class="discussion-embed"></div>
+        <div id="homeDiscussionEmbed" class="discussion-embed"></div>
       </section>
     </section>
 
@@ -153,6 +145,7 @@
           <button id="completeWrongButton" class="button primary" type="button">继续练错题</button>
         </div>
       </article>
+      <div id="chapterDiscussionHost"></div>
     </section>
 
     <footer class="site-legal" aria-label="许可声明">
