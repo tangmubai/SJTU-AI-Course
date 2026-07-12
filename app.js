@@ -525,6 +525,7 @@
         + (session.revealed ? `，查看答案 ${session.revealed} 题` : "")
         + (session.removed ? `，手动移除 ${session.removed} 题` : "")
         + `；错题本现有 ${Object.keys(state.wrong).length} 题。`;
+      renderChapterDiscussion();
       showView("completeView");
       return;
     }
@@ -550,9 +551,14 @@
     showView("homeView");
   }
 
-  function renderQuestionDiscussion(question) {
-    const host = $("questionDiscussionHost");
-    const document = bank.documents[question.documentIndex];
+  function renderChapterDiscussion() {
+    const host = $("chapterDiscussionHost");
+    if (session?.mode !== "chapter") {
+      host.innerHTML = "";
+      return;
+    }
+
+    const document = bank.documents[session.documentIndex];
     const title = document.name.replace(/\.pdf$/i, "");
     const term = `章节讨论 · ${title}`;
     host.innerHTML = `
@@ -563,7 +569,7 @@
         </summary>
         <div class="chapter-discussion-body">
           <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
-          <div id="questionDiscussionEmbed" class="discussion-embed"></div>
+          <div id="chapterDiscussionEmbed" class="discussion-embed"></div>
         </div>
       </details>`;
 
@@ -571,7 +577,7 @@
     details.addEventListener("toggle", () => {
       if (!details.open) return;
       window.dispatchEvent(new CustomEvent("ai-course-open-chapter-discussion", {
-        detail: { hostId: "questionDiscussionEmbed", term },
+        detail: { hostId: "chapterDiscussionEmbed", term },
       }));
     }, { once: true });
   }
