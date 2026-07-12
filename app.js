@@ -235,6 +235,7 @@
     $("sourceLabel").textContent = `${question.document.replace(/\.pdf$/i, "")} · 第 ${question.page} 页 · 题 ${question.number}`;
     $("pdfLink").href = encodeURI(question.pdf) + `#page=${question.page}`;
     $("questionPrompt").innerHTML = formatPrompt(question.prompt, question.type);
+    renderQuestionDiscussion(question);
     $("feedbackPanel").className = "feedback hidden";
     $("wrongToggleButton").classList.remove("hidden");
     $("revealGradeControls").className = "reveal-grade hidden";
@@ -524,7 +525,6 @@
         + (session.revealed ? `，查看答案 ${session.revealed} 题` : "")
         + (session.removed ? `，手动移除 ${session.removed} 题` : "")
         + `；错题本现有 ${Object.keys(state.wrong).length} 题。`;
-      renderChapterDiscussion();
       showView("completeView");
       return;
     }
@@ -550,14 +550,9 @@
     showView("homeView");
   }
 
-  function renderChapterDiscussion() {
-    const host = $("chapterDiscussionHost");
-    if (session?.mode !== "chapter") {
-      host.innerHTML = "";
-      return;
-    }
-
-    const document = bank.documents[session.documentIndex];
+  function renderQuestionDiscussion(question) {
+    const host = $("questionDiscussionHost");
+    const document = bank.documents[question.documentIndex];
     const title = document.name.replace(/\.pdf$/i, "");
     const term = `章节讨论 · ${title}`;
     host.innerHTML = `
@@ -568,7 +563,7 @@
         </summary>
         <div class="chapter-discussion-body">
           <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
-          <div id="chapterDiscussionEmbed" class="discussion-embed"></div>
+          <div id="questionDiscussionEmbed" class="discussion-embed"></div>
         </div>
       </details>`;
 
@@ -576,7 +571,7 @@
     details.addEventListener("toggle", () => {
       if (!details.open) return;
       window.dispatchEvent(new CustomEvent("ai-course-open-chapter-discussion", {
-        detail: { hostId: "chapterDiscussionEmbed", term },
+        detail: { hostId: "questionDiscussionEmbed", term },
       }));
     }, { once: true });
   }
