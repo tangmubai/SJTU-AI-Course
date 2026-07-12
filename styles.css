@@ -305,18 +305,38 @@ h1 { margin: 0; font-size: clamp(34px, 5vw, 55px); line-height: 1.15; letter-spa
 .chapter-practice-button:hover { border-color: var(--primary); background: var(--primary-soft); }
 
 .discussion-panel { margin-top: 28px; padding: 28px; }
-.discussion-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.discussion-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .discussion-heading h2 { margin: 0; font-size: 28px; }
-.discussion-heading p:not(.eyebrow) { margin: 8px 0 0; color: var(--muted); }
-.discussion-actions { display: flex; flex: 0 0 auto; gap: 16px; align-items: center; }
 .discussion-link { flex: 0 0 auto; text-decoration: none; white-space: nowrap; }
-.discussion-status { margin: 20px 0 0; color: var(--muted); font-size: 14px; }
-.discussion-status.hidden { display: none; }
-.discussion-status.error { color: var(--warm); }
 .discussion-embed { margin-top: 18px; }
 .discussion-embed .giscus,
 .discussion-embed .giscus-frame { width: 100%; }
 .discussion-embed .giscus-frame { border: 0; }
+.chapter-discussion {
+  max-width: 880px;
+  margin: 24px auto 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel-bg);
+}
+.chapter-discussion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 20px;
+  cursor: pointer;
+  color: var(--ink);
+  font-weight: 750;
+  list-style: none;
+}
+.chapter-discussion summary::-webkit-details-marker { display: none; }
+.chapter-discussion summary::after { content: "⌄"; color: var(--primary); transition: transform 160ms ease; }
+.chapter-discussion[open] summary::after { transform: rotate(180deg); }
+.chapter-discussion-hint { margin-left: auto; color: var(--muted); font-size: 13px; font-weight: 600; }
+.chapter-discussion-body { padding: 0 20px 20px; border-top: 1px solid var(--line); }
+.chapter-discussion-body .discussion-link { display: inline-block; margin-top: 14px; }
 
 .practice-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
 .mode-label, .badge { padding: 5px 10px; border-radius: 999px; color: var(--primary); background: var(--primary-soft); font-size: 12px; font-weight: 800; }
@@ -623,8 +643,9 @@ h1 { margin: 0; font-size: clamp(34px, 5vw, 55px); line-height: 1.15; letter-spa
   .chapter-practice-button { grid-column: 3; grid-row: 1 / span 2; }
   .doc-track { max-width: none; }
   .discussion-panel { padding: 20px; }
-  .discussion-heading { align-items: flex-start; flex-direction: column; }
-  .discussion-actions { flex-wrap: wrap; gap: 12px; }
+  .chapter-discussion { margin-top: 20px; }
+  .chapter-discussion summary { padding: 16px; }
+  .chapter-discussion-body { padding: 0 16px 16px; }
   .question-meta a { width: 100%; margin-left: 0; }
   .complete-card { padding: 36px 22px; }
   .complete-actions { flex-direction: column; }

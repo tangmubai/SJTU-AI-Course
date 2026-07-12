@@ -121,8 +121,14 @@
 
   function refreshStats() {
     const wrongCount = Object.keys(state.wrong).length;
+    const remainingAll = bank.questions.filter((question) => !state.completed[question.id]).length;
     $("answeredStat").textContent = state.attempts || 0;
     $("wrongStat").textContent = wrongCount;
+    $("allModeDescription").textContent = remainingAll
+      ? `按原顺序练习尚未作答的题目，剩余 ${remainingAll} 道。`
+      : "全部题目均已练习完成。";
+    $("allModeButton").textContent = remainingAll ? "开始顺序练习" : "全部题目已练完";
+    $("allModeButton").disabled = remainingAll === 0;
     $("wrongModeDescription").textContent = wrongCount
       ? `当前有 ${wrongCount} 道错题，答对后可移出错题本。`
       : "目前还没有错题。";
@@ -180,17 +186,14 @@
       ? bank.questions.filter((question) => state.wrong[question.id])
       : mode === "chapter" && validDocumentIndex
         ? bank.questions.filter((question) => question.documentIndex === documentIndex)
-        : bank.questions.slice();
+        : bank.questions.filter((question) => !state.completed[question.id]);
     if (!questions.length) return;
 
-    const startIndex = mode === "all"
-      ? Math.min(Number(state.resumeAll) || 0, questions.length - 1)
-      : 0;
     session = {
       mode,
       documentIndex: mode === "chapter" ? documentIndex : null,
       questions,
-      index: startIndex,
+      index: 0,
       correct: 0,
       incorrect: 0,
       revealed: 0,
@@ -462,7 +465,6 @@
         session.incorrect += 1;
         recordMistake(question, "practice");
       }
-      if (session.mode === "all") state.resumeAll = session.index + 1;
       session.answers[session.index] = { selected: selectedAnswer, isCorrect };
       saveState();
     }
@@ -479,7 +481,6 @@
       state.attempts = (state.attempts || 0) + 1;
       state.completed[question.id] = (state.completed[question.id] || 0) + 1;
       session.revealed += 1;
-      if (session.mode === "all") state.resumeAll = session.index + 1;
       session.answers[session.index] = { reveal: true, selfGrade: "correct", selfGradeFinalized: false };
       saveState();
     }
@@ -512,7 +513,6 @@
   function nextQuestion() {
     if (submitted && currentReveal) finalizeRevealGrade();
     if (session.index + 1 >= session.questions.length) {
-      if (session.mode === "all") state.resumeAll = 0;
       saveState();
       $("completeTitle").textContent = session.mode === "wrong"
         ? "错题练习完成"
@@ -524,6 +524,7 @@
         + (session.revealed ? `，查看答案 ${session.revealed} 题` : "")
         + (session.removed ? `，手动移除 ${session.removed} 题` : "")
         + `；错题本现有 ${Object.keys(state.wrong).length} 题。`;
+      renderChapterDiscussion();
       showView("completeView");
       return;
     }
@@ -547,6 +548,37 @@
     session = null;
     renderHome();
     showView("homeView");
+  }
+
+  function renderChapterDiscussion() {
+    const host = $("chapterDiscussionHost");
+    if (session?.mode !== "chapter") {
+      host.innerHTML = "";
+      return;
+    }
+
+    const document = bank.documents[session.documentIndex];
+    const title = document.name.replace(/\.pdf$/i, "");
+    const term = `章节讨论 · ${title}`;
+    host.innerHTML = `
+      <details class="chapter-discussion">
+        <summary>
+          <span>${escapeHtml(title)} 讨论</span>
+          <span class="chapter-discussion-hint">展开讨论</span>
+        </summary>
+        <div class="chapter-discussion-body">
+          <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
+          <div id="chapterDiscussionEmbed" class="discussion-embed"></div>
+        </div>
+      </details>`;
+
+    const details = host.querySelector(".chapter-discussion");
+    details.addEventListener("toggle", () => {
+      if (!details.open) return;
+      window.dispatchEvent(new CustomEvent("ai-course-open-chapter-discussion", {
+        detail: { hostId: "chapterDiscussionEmbed", term },
+      }));
+    }, { once: true });
   }
 
   function resetAll() {
