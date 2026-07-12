@@ -278,7 +278,7 @@ h1 { margin: 0; font-size: clamp(34px, 5vw, 55px); line-height: 1.15; letter-spa
 .document-list { display: grid; gap: 10px; }
 .document-row {
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 44px 1fr auto auto;
   gap: 14px;
   align-items: center;
   padding: 14px 16px;
@@ -293,6 +293,30 @@ h1 { margin: 0; font-size: clamp(34px, 5vw, 55px); line-height: 1.15; letter-spa
 .doc-bar { width: 0; height: 100%; border-radius: inherit; background: var(--primary); transition: width 200ms ease; }
 .document-learned { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
 .document-count { color: var(--muted); font-size: 14px; }
+.chapter-practice-button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--primary);
+  background: var(--secondary-bg);
+  font-weight: 750;
+}
+.chapter-practice-button:hover { border-color: var(--primary); background: var(--primary-soft); }
+
+.discussion-panel { margin-top: 28px; padding: 28px; }
+.discussion-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.discussion-heading h2 { margin: 0; font-size: 28px; }
+.discussion-heading p:not(.eyebrow) { margin: 8px 0 0; color: var(--muted); }
+.discussion-actions { display: flex; flex: 0 0 auto; gap: 16px; align-items: center; }
+.discussion-link { flex: 0 0 auto; text-decoration: none; white-space: nowrap; }
+.discussion-status { margin: 20px 0 0; color: var(--muted); font-size: 14px; }
+.discussion-status.hidden { display: none; }
+.discussion-status.error { color: var(--warm); }
+.discussion-embed { margin-top: 18px; }
+.discussion-embed .giscus,
+.discussion-embed .giscus-frame { width: 100%; }
+.discussion-embed .giscus-frame { border: 0; }
 
 .practice-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
 .mode-label, .badge { padding: 5px 10px; border-radius: 999px; color: var(--primary); background: var(--primary-soft); font-size: 12px; font-weight: 800; }
@@ -594,9 +618,13 @@ h1 { margin: 0; font-size: clamp(34px, 5vw, 55px); line-height: 1.15; letter-spa
   .mode-grid { grid-template-columns: 1fr; }
   .mode-card { min-height: 240px; }
   .library-panel { padding: 20px; }
-  .document-row { grid-template-columns: 36px 1fr; }
+  .document-row { grid-template-columns: 36px 1fr auto; }
   .document-count { grid-column: 2; }
+  .chapter-practice-button { grid-column: 3; grid-row: 1 / span 2; }
   .doc-track { max-width: none; }
+  .discussion-panel { padding: 20px; }
+  .discussion-heading { align-items: flex-start; flex-direction: column; }
+  .discussion-actions { flex-wrap: wrap; gap: 12px; }
   .question-meta a { width: 100%; margin-left: 0; }
   .complete-card { padding: 36px 22px; }
   .complete-actions { flex-direction: column; }

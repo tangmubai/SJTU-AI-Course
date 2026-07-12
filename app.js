@@ -101,6 +101,7 @@
     const button = $("themeToggle");
     button.textContent = theme === "dark" ? "☀" : "🌙";
     button.setAttribute("aria-label", theme === "dark" ? "切换浅色模式" : "切换深色模式");
+    window.dispatchEvent(new CustomEvent("ai-course-theme-change", { detail: theme }));
   }
 
   function toggleTheme() {
@@ -155,30 +156,58 @@
       <div class="document-row">
         <span class="document-order">${String(index + 1).padStart(2, "0")}</span>
         <div class="document-main">
-          <span class="document-name" title="${escapeHtml(doc.name)}">${escapeHtml(doc.name)}</span>
+          <span class="document-name" title="${escapeHtml(doc.name)}">${escapeHtml(doc.name.replace(/\.pdf$/i, ""))}</span>
           <div class="document-progress">
             <div class="doc-track"><div class="doc-bar" style="width:${pct}%"></div></div>
             <span class="document-learned">已学 ${learned}/${doc.questionCount}</span>
           </div>
         </div>
         <span class="document-count">${doc.questionCount} 题</span>
+        <button class="chapter-practice-button" type="button" data-document-index="${index}">练习本章</button>
       </div>`;
     }).join("");
+    document.querySelectorAll(".chapter-practice-button").forEach((button) => {
+      button.addEventListener("click", () => startSession("chapter", Number(button.dataset.documentIndex)));
+    });
     refreshStats();
   }
 
-  function startSession(mode) {
+  function startSession(mode, documentIndex = null) {
+    const validDocumentIndex = Number.isInteger(documentIndex)
+      && documentIndex >= 0
+      && documentIndex < bank.documents.length;
     const questions = mode === "wrong"
       ? bank.questions.filter((question) => state.wrong[question.id])
-      : bank.questions.slice();
+      : mode === "chapter" && validDocumentIndex
+        ? bank.questions.filter((question) => question.documentIndex === documentIndex)
+        : bank.questions.slice();
     if (!questions.length) return;
 
     const startIndex = mode === "all"
       ? Math.min(Number(state.resumeAll) || 0, questions.length - 1)
       : 0;
-    session = { mode, questions, index: startIndex, correct: 0, incorrect: 0, revealed: 0, removed: 0, answers: {} };
+    session = {
+      mode,
+      documentIndex: mode === "chapter" ? documentIndex : null,
+      questions,
+      index: startIndex,
+      correct: 0,
+      incorrect: 0,
+      revealed: 0,
+      removed: 0,
+      answers: {},
+    };
     showView("practiceView");
     renderQuestion();
+  }
+
+  function sessionLabel() {
+    if (session?.mode === "wrong") return "错题练习";
+    if (session?.mode === "chapter") {
+      const document = bank.documents[session.documentIndex];
+      return `${document?.name.replace(/\.pdf$/i, "") || "本章"} · 章节练习`;
+    }
+    return "顺序练习";
   }
 
   function optionsFor(question) {
@@ -196,7 +225,7 @@
     currentReveal = false;
     revealGradeSelection = "correct";
 
-    $("modeLabel").textContent = session.mode === "wrong" ? "错题练习" : "顺序练习";
+    $("modeLabel").textContent = sessionLabel();
     $("progressText").textContent = `${session.index + 1} / ${session.questions.length}`;
     $("progressBar").style.width = `${((session.index + 1) / session.questions.length) * 100}%`;
     $("typeBadge").textContent = question.type;
@@ -485,7 +514,11 @@
     if (session.index + 1 >= session.questions.length) {
       if (session.mode === "all") state.resumeAll = 0;
       saveState();
-      $("completeTitle").textContent = session.mode === "wrong" ? "错题练习完成" : "顺序练习完成";
+      $("completeTitle").textContent = session.mode === "wrong"
+        ? "错题练习完成"
+        : session.mode === "chapter"
+          ? "章节练习完成"
+          : "顺序练习完成";
       $("completeSummary").textContent =
         `本轮答对 ${session.correct} 题，答错 ${session.incorrect} 题`
         + (session.revealed ? `，查看答案 ${session.revealed} 题` : "")

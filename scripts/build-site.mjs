@@ -12,6 +12,7 @@ const siteFiles = [
   "practice.html",
   "styles.css",
   "app.js",
+  "discussion.js",
   "practice.js",
   "questions.js"
 ];
