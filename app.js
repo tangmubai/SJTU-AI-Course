@@ -582,6 +582,31 @@
     }, { once: true });
   }
 
+  function renderQuestionDiscussion(question) {
+    const host = $("questionDiscussionHost");
+    const title = question.document.replace(/\.pdf$/i, "");
+    const term = `章节讨论 · ${title}`;
+    host.innerHTML = `
+      <details class="chapter-discussion">
+        <summary>
+          <span>${escapeHtml(title)} 讨论</span>
+          <span class="chapter-discussion-hint">展开讨论</span>
+        </summary>
+        <div class="chapter-discussion-body">
+          <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
+          <div id="questionDiscussionEmbed" class="discussion-embed"></div>
+        </div>
+      </details>`;
+
+    const details = host.querySelector(".chapter-discussion");
+    details.addEventListener("toggle", () => {
+      if (!details.open) return;
+      window.dispatchEvent(new CustomEvent("ai-course-open-chapter-discussion", {
+        detail: { hostId: "questionDiscussionEmbed", term },
+      }));
+    }, { once: true });
+  }
+
   function resetAll() {
     if (!window.confirm("确定清空答题次数、顺序进度和全部错题吗？此操作不可撤销。")) return;
     state = { ...defaultState, wrong: {}, completed: {}, mistakes: {} };
