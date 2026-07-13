@@ -312,6 +312,48 @@ h1 { margin: 0; font-size: clamp(34px, 5vw, 55px); line-height: 1.15; letter-spa
 .discussion-embed .giscus,
 .discussion-embed .giscus-frame { width: 100%; }
 .discussion-embed .giscus-frame { border: 0; }
+.home-announcement-card {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--primary-soft);
+}
+.home-announcement-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.home-announcement-head h3 { margin: 0; font-size: 17px; }
+.home-announcement-head h3 a { color: var(--ink); text-decoration: none; }
+.home-announcement-head h3 a:hover { color: var(--primary); }
+.announcement-badge {
+  flex: 0 0 auto;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+}
+.announcement-date { margin-left: auto; color: var(--muted); font-size: 12px; }
+.home-announcement-body { margin-top: 10px; color: var(--ink); font-size: 14px; line-height: 1.7; overflow-wrap: break-word; }
+.home-announcement-body > *:first-child { margin-top: 0; }
+.home-announcement-body > *:last-child { margin-bottom: 0; }
+.home-announcement-body h1,
+.home-announcement-body h2,
+.home-announcement-body h3 { font-size: 15px; margin: 12px 0 6px; }
+.home-announcement-body a { color: var(--primary); }
+.home-announcement-body ul,
+.home-announcement-body ol { padding-left: 22px; }
+.home-announcement-body code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--option-key-bg);
+  font-size: 13px;
+}
+.home-announcement-body img { max-width: 100%; }
 .chapter-discussion {
   max-width: 880px;
   margin: 24px auto 0;
