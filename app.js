@@ -116,6 +116,8 @@
 
   function showView(id) {
     views.forEach((viewId) => $(viewId).classList.toggle("hidden", viewId !== id));
+    // 回到首页时重新挂载首页讨论（章节讨论展开时会卸载它，giscus 单页面只支持一个实例）。
+    if (id === "homeView") window.dispatchEvent(new CustomEvent("ai-course-open-home-discussion"));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
