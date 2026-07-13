@@ -35,6 +35,8 @@ for (const entry of await readdir(root, { withFileTypes: true })) {
 
 await injectAnnouncement();
 
+await injectAnnouncement();
+
 console.log(`Built static site in ${dist}`);
 
 async function injectAnnouncement() {
