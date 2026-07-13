@@ -235,6 +235,7 @@
     $("sourceLabel").textContent = `${question.document.replace(/\.pdf$/i, "")} · 第 ${question.page} 页 · 题 ${question.number}`;
     $("pdfLink").href = encodeURI(question.pdf) + `#page=${question.page}`;
     $("questionPrompt").innerHTML = formatPrompt(question.prompt, question.type);
+    renderQuestionDiscussion(question);
     $("feedbackPanel").className = "feedback hidden";
     $("wrongToggleButton").classList.remove("hidden");
     $("revealGradeControls").className = "reveal-grade hidden";
