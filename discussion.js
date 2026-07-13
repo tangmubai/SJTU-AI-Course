@@ -13,8 +13,20 @@
     return document.documentElement.getAttribute("data-theme") === "dark" ? "dark_dimmed" : "light";
   }
 
+  // giscus 的 client.js 会复用页面上第一个已存在的 .giscus 容器，
+  // 单页面同时只能有一个实例；挂载新实例前必须清掉旧实例，
+  // 否则 iframe 会被塞进其他（可能隐藏的）容器里。
+  function unmountAll() {
+    document.querySelectorAll(".giscus").forEach((el) => el.remove());
+    document.querySelectorAll(`script[src^="${GISCUS_ORIGIN}"]`).forEach((el) => el.remove());
+    document.querySelectorAll("[data-giscus-mounted]").forEach((el) => {
+      delete el.dataset.giscusMounted;
+    });
+  }
+
   function mountDiscussion(host, mapping, term) {
     if (!host || host.dataset.giscusMounted === "true") return;
+    unmountAll();
     host.dataset.giscusMounted = "true";
 
     const script = document.createElement("script");
@@ -45,7 +57,12 @@
     });
   }
 
-  mountDiscussion(document.getElementById("homeDiscussionEmbed"), "number", "7");
+  function mountHomeDiscussion() {
+    mountDiscussion(document.getElementById("homeDiscussionEmbed"), "number", "7");
+  }
+
+  mountHomeDiscussion();
+  window.addEventListener("ai-course-open-home-discussion", mountHomeDiscussion);
   window.addEventListener("ai-course-theme-change", (event) => updateTheme(event.detail));
   window.addEventListener("ai-course-open-chapter-discussion", (event) => {
     const { hostId, term } = event.detail || {};
