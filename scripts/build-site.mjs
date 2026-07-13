@@ -1,5 +1,4 @@
 import { copyFile, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
-import { execFileSync } from "node:child_process";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -41,20 +40,19 @@ console.log(`Built static site in ${dist}`);
 async function injectAnnouncement() {
   let discussion;
   try {
-    const query = `
-      query($owner: String!, $repo: String!, $number: Int!) {
-        repository(owner: $owner, name: $repo) {
-          discussion(number: $number) { title bodyHTML url updatedAt }
-        }
-      }`;
-    const out = execFileSync("gh", [
-      "api", "graphql",
-      "-f", `query=${query}`,
-      "-f", `owner=${ANNOUNCEMENT.owner}`,
-      "-f", `repo=${ANNOUNCEMENT.repo}`,
-      "-F", `number=${ANNOUNCEMENT.number}`,
-    ], { encoding: "utf8" });
-    discussion = JSON.parse(out).data.repository.discussion;
+    // 匿名调用 GitHub REST API（公开仓库无需凭据，html 媒体类型直接返回渲染后的正文）。
+    const headers = {
+      "Accept": "application/vnd.github.html+json",
+      "User-Agent": "ai-course-practice-build",
+    };
+    if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+    const res = await fetch(
+      `https://api.github.com/repos/${ANNOUNCEMENT.owner}/${ANNOUNCEMENT.repo}/discussions/${ANNOUNCEMENT.number}`,
+      { headers },
+    );
+    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+    const data = await res.json();
+    discussion = { title: data.title, bodyHTML: data.body_html, url: data.html_url, updatedAt: data.updated_at };
   } catch (error) {
     console.warn(`警告：拉取公告（discussion #${ANNOUNCEMENT.number}）失败，主页将不显示公告。原因：${error.message?.split("\n")[0]}`);
     return;
