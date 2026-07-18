@@ -20,13 +20,13 @@
 - 章节练习：首页每一章都可直接进入该章的顺序练习，进度、错题和作答记录与全题库练习共用。
 - 深色模式：右上角可切换浅色 / 深色主题，偏好会自动保存。
 - 查看原题：练习页可打开对应 PDF 页进行核对。
-- 课程讨论：首页固定同步仓库的 [Discussion #7](https://github.com/tangmubai/SJTU-AI-Course/discussions/7)；每章练习完成后可展开该章专属讨论。
+- 课程讨论：首页固定同步仓库的 [Discussion #7](https://github.com/tombirdQAQ/SJTU-AI-Course/discussions/7)；每章练习完成后可展开该章专属讨论。
 
 ## 本地使用
 
 运行命令：
 ```bash
-git clone https://github.com/tangmubai/SJTU-AI-Course.git
+git clone https://github.com/tombirdQAQ/SJTU-AI-Course.git
 ```
 
 然后双击 `index.html`，或用浏览器打开即可。
