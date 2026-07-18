@@ -570,7 +570,7 @@
           <span class="chapter-discussion-hint">展开讨论</span>
         </summary>
         <div class="chapter-discussion-body">
-          <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
+          <a class="text-button discussion-link" href="https://github.com/tombirdQAQ/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
           <div id="chapterDiscussionEmbed" class="discussion-embed"></div>
         </div>
       </details>`;
@@ -595,7 +595,7 @@
           <span class="chapter-discussion-hint">展开讨论</span>
         </summary>
         <div class="chapter-discussion-body">
-          <a class="text-button discussion-link" href="https://github.com/tangmubai/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
+          <a class="text-button discussion-link" href="https://github.com/tombirdQAQ/SJTU-AI-Course/discussions" target="_blank" rel="noopener">在 GitHub 中查看 ↗</a>
           <div id="questionDiscussionEmbed" class="discussion-embed"></div>
         </div>
       </details>`;
@@ -628,7 +628,7 @@
     if (!session || !session.questions[session.index]) return null;
     
     const question = session.questions[session.index];
-    const repoUrl = "https://github.com/tangmubai/SJTU-AI-Course";
+    const repoUrl = "https://github.com/tombirdQAQ/SJTU-AI-Course";
     const title = `【反馈】${question.document.replace(/\.pdf$/i, "")} - 第 ${question.page} 页 - 题 ${question.number}`;
     const body = `## 题目信息\n- **PDF**: ${question.document}\n- **页码**: 第 ${question.page} 页\n- **题号**: 第 ${question.number} 题\n- **题型**: ${question.type}\n\n## 问题描述\n请在此处描述您发现的问题：\n\n## 问题内容\n**题目**: ${question.prompt}\n\n**答案**: ${question.answer}\n\n## 建议\n请提出您的改进建议：`;
     
