@@ -161,6 +161,7 @@
     $("documentList").innerHTML = bank.documents.map((doc, index) => {
       const learned = learnedByDoc[index] || 0;
       const pct = doc.questionCount ? Math.round((learned / doc.questionCount) * 100) : 0;
+      const chapterCompleted = learned >= doc.questionCount;
       return `
       <div class="document-row">
         <span class="document-order">${String(index + 1).padStart(2, "0")}</span>
@@ -172,7 +173,7 @@
           </div>
         </div>
         <span class="document-count">${doc.questionCount} 题</span>
-        <button class="chapter-practice-button" type="button" data-document-index="${index}">练习本章</button>
+        <button class="chapter-practice-button" type="button" data-document-index="${index}" ${chapterCompleted ? "disabled" : ""}>${chapterCompleted ? "已完成" : "练习本章"}</button>
       </div>`;
     }).join("");
     document.querySelectorAll(".chapter-practice-button").forEach((button) => {
