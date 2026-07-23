@@ -12,6 +12,7 @@ const ANNOUNCEMENT_SLOT = "<!-- announcement:slot -->";
 const siteFiles = [
   "_headers",
   "_redirects",
+  "favicon.svg",
   "index.html",
   "practice.html",
   "styles.css",
